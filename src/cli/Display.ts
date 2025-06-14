@@ -47,32 +47,32 @@ export class GameDisplay {
     });
     
     // Display header with rank labels
-    let header = '    ';
+    let header = '   ';
     rankOrder.forEach(rank => {
-      header += rank.padEnd(4);
+      header += rank.padEnd(3);
     });
     console.log(chalk.gray(header));
     
     // Display each suit row
     suitOrder.forEach(suit => {
-      let line = suit + ':  ';
+      let line = suit + ': ';
       rankOrder.forEach(rank => {
         if (grid[suit] && grid[suit][rank]) {
           const cardNotation = rank + suit;
           
           // Special formatting
           if (cardNotation === '5H') {
-            line += chalk.bold.red(cardNotation.padEnd(4));
+            line += chalk.bold.red(cardNotation.padEnd(3));
           } else if (suit === 'H' || suit === 'D') {
-            line += chalk.red(cardNotation.padEnd(4));
+            line += chalk.red(cardNotation.padEnd(3));
           } else {
-            line += cardNotation.padEnd(4);
+            line += cardNotation.padEnd(3);
           }
         } else if (rank === 'jj' && grid['jj'] && grid['jj']['jj']) {
           // Skip joker slot for regular suits
-          line += '.   ';
+          line += '.  ';
         } else {
-          line += '.   ';
+          line += '.  ';
         }
       });
       console.log(line);
@@ -80,12 +80,12 @@ export class GameDisplay {
     
     // Display jokers on separate line if present
     if (grid['jj'] && grid['jj']['jj']) {
-      let jokerLine = 'J:  ';
+      let jokerLine = 'J: ';
       rankOrder.forEach(rank => {
         if (rank === 'jj') {
-          jokerLine += chalk.magenta('jj'.padEnd(4));
+          jokerLine += chalk.magenta('jj'.padEnd(3));
         } else {
-          jokerLine += '.   ';
+          jokerLine += '.  ';
         }
       });
       console.log(jokerLine);

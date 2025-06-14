@@ -2,6 +2,7 @@
   "name": "heartfive-cli",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "type": "module",
   "bin": {
     "heartfive": "./dist/cli.js"
   },
@@ -11,6 +12,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",
+    "dev:ink": "node --import tsx src/cli-ink.tsx",
+    "dev:ink-demo": "node --import tsx src/cli-ink-demo.tsx",
     "start": "node dist/cli.js",
     "play": "node play.js",
     "demo": "node demo.js",
@@ -41,8 +44,13 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@types/react": "^19.1.8",
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
-    "inquirer": "^12.6.3"
+    "ink": "^6.0.0",
+    "ink-select-input": "^6.2.0",
+    "ink-text-input": "^6.0.0",
+    "inquirer": "^12.6.3",
+    "react": "^19.1.0"
   }
 }
