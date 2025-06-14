@@ -10,6 +10,7 @@ export class GameController {
   private gameState: GameStateManager;
   private botStrategies: Map<string, any> = new Map();
   private isGameRunning: boolean = false;
+  private lastRoundWinnerId: string | undefined;
 
   constructor() {
     this.gameState = new GameStateManager(4);
@@ -54,7 +55,7 @@ export class GameController {
   }
 
   private async playRound(): Promise<void> {
-    this.gameState.startNewRound();
+    this.gameState.startNewRound(this.lastRoundWinnerId);
     
     // Display round start info
     const state = this.gameState.getState();
@@ -81,6 +82,7 @@ export class GameController {
     }
 
     GameDisplay.displayRoundWinner(roundWinner);
+    this.lastRoundWinnerId = roundWinner.id;
   }
 
   private async handleHumanTurn(player: Player): Promise<boolean> {
@@ -97,9 +99,7 @@ export class GameController {
       }
 
       // Show prompt
-      const isLeader = this.gameState.getState().currentLeader === player.id;
-      const establishedType = this.gameState.getState().establishedMeldType;
-      GameDisplay.displayYourTurn(isLeader, establishedType);
+      GameDisplay.displayYourTurn(this.gameState.getState());
       
       const input = await this.getPlayerInput('');
       const command = InputParser.parseCommand(input);

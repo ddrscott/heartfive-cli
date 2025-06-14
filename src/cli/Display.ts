@@ -216,7 +216,11 @@ export class GameDisplay {
 
   static displayRoundStart(round: number, firstPlayer: Player): void {
     console.log('---');
-    console.log(`${firstPlayer.name} has 3H and can start round ${round}.`);
+    if (round === 1) {
+      console.log(`${firstPlayer.name} has 3H and can start round ${round}.`);
+    } else {
+      console.log(`${firstPlayer.name} won the previous round and leads round ${round}.`);
+    }
   }
 
   static displayRoundWinner(winner: Player): void {
@@ -240,11 +244,18 @@ export class GameDisplay {
     console.log(message);
   }
 
-  static displayYourTurn(isLeader: boolean, establishedType?: string): void {
+  static displayYourTurn(gameState: GameState): void {
+    const isLeader = gameState.currentLeader === 'human';
+    const establishedType = gameState.establishedMeldType;
+    
     if (isLeader && !establishedType) {
       console.log(chalk.yellow('> You are the leader! Play any valid meld.'));
+    } else if (gameState.lastPlay) {
+      const lastPlayer = gameState.players.find(p => p.id === gameState.lastPlay!.player);
+      const cardsStr = this.stripAnsi(this.formatMeldCards(gameState.lastPlay.meld));
+      process.stdout.write(`Can you beat ${lastPlayer?.name}'s ${cardsStr} > `);
     } else {
-      console.log('> ');
+      process.stdout.write('> ');
     }
   }
 

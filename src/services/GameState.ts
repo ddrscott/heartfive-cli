@@ -32,7 +32,7 @@ export class GameStateManager {
     };
   }
 
-  startNewRound(): void {
+  startNewRound(previousRoundWinnerId?: string): void {
     this.state.round++;
     this.state.playHistory = [];
     this.state.lastPlay = undefined;
@@ -42,8 +42,24 @@ export class GameStateManager {
     // Deal cards
     this.dealCards();
 
-    // Find starting player (has 3H)
-    const startingPlayerIndex = this.findStartingPlayer();
+    // Determine starting player
+    let startingPlayerIndex: number;
+    
+    if (this.state.round === 1) {
+      // First round: find who has 3H
+      startingPlayerIndex = this.findStartingPlayer();
+    } else if (previousRoundWinnerId) {
+      // Subsequent rounds: previous winner leads
+      startingPlayerIndex = this.state.players.findIndex(p => p.id === previousRoundWinnerId);
+      if (startingPlayerIndex === -1) {
+        // Fallback if winner not found
+        startingPlayerIndex = 0;
+      }
+    } else {
+      // Fallback: first player
+      startingPlayerIndex = 0;
+    }
+    
     this.state.currentPlayerIndex = startingPlayerIndex;
     this.state.currentLeader = this.state.players[startingPlayerIndex].id;
   }

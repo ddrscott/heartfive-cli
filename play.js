@@ -260,6 +260,10 @@ function displayYourTurn(state) {
   
   if (isLeader && !establishedType) {
     console.log(colors.yellow('> You are the leader! Play any valid meld.'));
+  } else if (state.lastPlay) {
+    const lastPlayer = state.players.find(p => p.id === state.lastPlay.player);
+    const cardsStr = stripAnsi(formatMeldCards(state.lastPlay.meld));
+    process.stdout.write(`Can you beat ${lastPlayer.name}'s ${cardsStr} > `);
   } else {
     process.stdout.write('> ');
   }
@@ -312,13 +316,18 @@ async function gameLoop() {
   console.log('Cat enters the game');
   console.log('Game is dealt');
   
-  game.startNewRound();
+  let lastWinnerId = undefined;
+  game.startNewRound(lastWinnerId);
   
-  // Show who has 3H and starts
+  // Show who starts
   const state = game.getState();
   const startingPlayer = state.players[state.currentPlayerIndex];
   console.log('---');
-  console.log(`${startingPlayer.name} has 3H and can start round ${state.round}.`);
+  if (state.round === 1) {
+    console.log(`${startingPlayer.name} has 3H and can start round ${state.round}.`);
+  } else {
+    console.log(`${startingPlayer.name} won the previous round and leads round ${state.round}.`);
+  }
   
   while (true) {
     const currentPlayer = game.getCurrentPlayer();
@@ -330,13 +339,18 @@ async function gameLoop() {
       const winner = game.checkRoundEnd();
       if (winner) {
         console.log(`${winner.name} wins the round!`);
-        game.startNewRound();
+        lastWinnerId = winner.id;
+        game.startNewRound(lastWinnerId);
         
-        // Show who has 3H and starts
+        // Show who starts next round
         const newState = game.getState();
         const newStartingPlayer = newState.players[newState.currentPlayerIndex];
         console.log('---');
-        console.log(`${newStartingPlayer.name} has 3H and can start round ${newState.round}.`);
+        if (newState.round === 1) {
+          console.log(`${newStartingPlayer.name} has 3H and can start round ${newState.round}.`);
+        } else {
+          console.log(`${newStartingPlayer.name} won the previous round and leads round ${newState.round}.`);
+        }
         continue;
       }
       
@@ -407,13 +421,18 @@ async function gameLoop() {
             const winner = game.checkRoundEnd();
             if (winner) {
               console.log(`${winner.name} wins the round!`);
-              game.startNewRound();
+              lastWinnerId = winner.id;
+              game.startNewRound(lastWinnerId);
               
-              // Show who has 3H and starts
+              // Show who starts next round
               const newState = game.getState();
               const newStartingPlayer = newState.players[newState.currentPlayerIndex];
               console.log('---');
-              console.log(`${newStartingPlayer.name} has 3H and can start round ${newState.round}.`);
+              if (newState.round === 1) {
+                console.log(`${newStartingPlayer.name} has 3H and can start round ${newState.round}.`);
+              } else {
+                console.log(`${newStartingPlayer.name} won the previous round and leads round ${newState.round}.`);
+              }
               break;
             }
             
@@ -435,13 +454,18 @@ async function gameLoop() {
             const moveWinner = game.checkRoundEnd();
             if (moveWinner) {
               console.log(`${moveWinner.name} wins the round!`);
-              game.startNewRound();
+              lastWinnerId = moveWinner.id;
+              game.startNewRound(lastWinnerId);
               
-              // Show who has 3H and starts
+              // Show who starts next round
               const newState = game.getState();
               const newStartingPlayer = newState.players[newState.currentPlayerIndex];
               console.log('---');
-              console.log(`${newStartingPlayer.name} has 3H and can start round ${newState.round}.`);
+              if (newState.round === 1) {
+                console.log(`${newStartingPlayer.name} has 3H and can start round ${newState.round}.`);
+              } else {
+                console.log(`${newStartingPlayer.name} won the previous round and leads round ${newState.round}.`);
+              }
               break;
             }
             
