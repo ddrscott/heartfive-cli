@@ -8,12 +8,15 @@ export class InkGameController {
   private botStrategies: Map<string, any> = new Map();
   private isGameRunning: boolean = false;
   private lastRoundWinnerId: string | undefined;
+  private humanFinished: boolean = false;
+  private finishedPlayers: Set<string> = new Set();
   
   // Callbacks for React integration
   public onStateChange?: (state: GameState) => void;
   public onInputRequest?: (prompt: string) => Promise<string>;
   public onHint?: (hint: string) => void;
   public onExit?: () => void;
+  public onWinner?: (winner: string, isHuman: boolean) => void;
   public resolveInput?: (value: string) => void;
 
   constructor() {
@@ -51,27 +54,69 @@ export class InkGameController {
       if (winner) {
         // Update win/loss stats
         this.updateGameStats(winner);
+        this.finishedPlayers.add(winner.id);
+        
+        // Remove winner's cards
+        winner.hand = [];
+        
         this.emitStateChange();
         
-        if (this.onHint) {
-          this.onHint(`GAME OVER! ${winner.name} wins the game!`);
+        // Show winner banner
+        if (this.onWinner) {
+          this.onWinner(winner.name, winner.id === 'human');
         }
         
-        // Ask if player wants to play again
-        const playAgain = await this.askPlayNewGame();
-        if (playAgain) {
-          // Reset for new game
-          this.gameState = new GameStateManager(4);
-          this.lastRoundWinnerId = undefined;
-          this.emitStateChange();
-          await new Promise(resolve => setTimeout(resolve, 100));
-          continue;
-        } else {
-          this.isGameRunning = false;
-          if (this.onExit) {
-            this.onExit();
+        // If human won or lost, continue with bots only
+        if (winner.id === 'human') {
+          this.humanFinished = true;
+          if (this.onHint) {
+            this.onHint('Congratulations! The bots will continue playing...');
           }
-          break;
+          // Small delay to see the victory
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          // Continue playing with bots
+          continue;
+        } else if (this.humanFinished) {
+          // Check if all positions determined (only one bot left)
+          const activePlayers = this.gameState.getState().players.filter(
+            p => !this.finishedPlayers.has(p.id)
+          );
+          
+          if (activePlayers.length === 1) {
+            // Last place determined
+            if (this.onHint) {
+              this.onHint(`Game complete! ${activePlayers[0].name} finishes last.`);
+            }
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Ask if player wants to play again
+            const playAgain = await this.askPlayNewGame();
+            if (playAgain) {
+              // Reset for new game
+              this.gameState = new GameStateManager(4);
+              this.lastRoundWinnerId = undefined;
+              this.humanFinished = false;
+              this.finishedPlayers.clear();
+              this.emitStateChange();
+              await new Promise(resolve => setTimeout(resolve, 100));
+              continue;
+            } else {
+              this.isGameRunning = false;
+              if (this.onExit) {
+                this.onExit();
+              }
+              break;
+            }
+          } else {
+            // Continue with remaining bots
+            continue;
+          }
+        } else {
+          // Human still playing, bot won
+          if (this.onHint) {
+            this.onHint(`${winner.name} wins! Keep playing for second place.`);
+          }
+          continue;
         }
       }
     }
@@ -97,6 +142,12 @@ export class InkGameController {
     while (!roundWinner) {
       const currentPlayer = this.gameState.getCurrentPlayer();
       let skipNextTurn = false;
+      
+      // Skip players who have already finished
+      if (this.finishedPlayers.has(currentPlayer.id)) {
+        this.gameState.nextTurn();
+        continue;
+      }
       
       if (currentPlayer.isBot) {
         // Add a small delay for bot turns to make it feel more natural

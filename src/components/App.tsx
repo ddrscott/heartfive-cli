@@ -6,6 +6,7 @@ import PlayHistory from './PlayHistory';
 import PlayerHands from './PlayerHands';
 import YourHand from './YourHand';
 import InputPrompt from './InputPrompt';
+import VictoryBanner from './VictoryBanner';
 
 export default function App() {
   const {exit} = useApp();
@@ -15,6 +16,7 @@ export default function App() {
   const [waitingForInput, setWaitingForInput] = useState(false);
   const [inputPrompt, setInputPrompt] = useState('');
   const [hint, setHint] = useState('');
+  const [currentWinner, setCurrentWinner] = useState<{name: string; isHuman: boolean} | null>(null);
 
   // Initialize game
   useEffect(() => {
@@ -37,6 +39,12 @@ export default function App() {
 
       gameController.onExit = () => {
         exit();
+      };
+
+      gameController.onWinner = (name: string, isHuman: boolean) => {
+        setCurrentWinner({name, isHuman});
+        // Clear winner banner after 3 seconds
+        setTimeout(() => setCurrentWinner(null), 3000);
       };
 
       await gameController.startGame();
@@ -68,6 +76,9 @@ export default function App() {
 
   return (
     <Box flexDirection="column" height="100%">
+      {currentWinner && (
+        <VictoryBanner winner={currentWinner.name} isHuman={currentWinner.isHuman} />
+      )}
       <Box flexGrow={1}>
         <Box width="35%" borderStyle="single" flexDirection="column">
           <PlayHistory gameState={gameState} />

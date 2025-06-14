@@ -97,13 +97,27 @@ Key files:
    - Win/Loss counters displayed for all players
    - Stats persist across rounds within a game session
 
-3. **Game Over Options**:
-   - When someone wins, you're prompted to play another game or quit
+3. **Victory Banner**:
+   - Nice ASCII art banner when you win
+   - Different styling for human vs bot victories
+
+4. **Complete Game Play**:
+   - After human wins/loses, bots continue playing
+   - Game determines 2nd, 3rd, and last place
+   - Full statistics for all positions
+
+5. **Game Over Options**:
+   - When all positions determined, prompted to play another game or quit
    - Statistics reset when starting a new game
 
-4. **Two-line Input Area**:
+6. **Two-line Input Area**:
    - Hints displayed on first line
    - Input prompt on second line for better visibility
+
+7. **Visual Card Tracking**:
+   - Bar graphs show relative card counts
+   - All players (including human) shown in one view
+   - Proper column alignment for stats
 
 ## Changes from Original
 
