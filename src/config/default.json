@@ -1,0 +1,38 @@
+{
+  "gameInfo": {
+    "name": "Heart of Five",
+    "players": {
+      "min": 2,
+      "max": 6,
+      "optimal": 4
+    },
+    "deck": "standard52Plus2Jokers"
+  },
+  "cardRanking": {
+    "singleRanks": ["3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A", "2", "jj", "JJ", "5H"],
+    "runRanks": ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"],
+    "suits": ["C", "D", "H", "S"]
+  },
+  "specialCards": {
+    "gameStarter": "3H",
+    "strongestSingle": "5H",
+    "smallJoker": "jj",
+    "bigJoker": "JJ"
+  },
+  "gameplay": {
+    "roundsToWin": 10,
+    "botDifficulties": ["intermediate", "intermediate", "advanced"],
+    "botNames": ["Alice", "Bob", "Cat"],
+    "autoPassOnNoMoves": true,
+    "thinkingDelay": {
+      "min": 100,
+      "max": 1000
+    }
+  },
+  "display": {
+    "showCardColors": true,
+    "showMeldTypes": true,
+    "maxHistoryEntries": 5,
+    "clearScreenOnUpdate": true
+  }
+}
