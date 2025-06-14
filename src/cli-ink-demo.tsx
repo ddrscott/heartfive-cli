@@ -26,34 +26,35 @@ const mockGameState: GameState = {
         {rank: '2', suit: 'C', notation: '2C', isJoker: false, is5H: false},
         {rank: '4', suit: 'C', notation: '4C', isJoker: false, is5H: false},
         {rank: '6', suit: 'C', notation: '6C', isJoker: false, is5H: false},
-        {rank: 'J', suit: 'C', notation: 'JC', isJoker: false, is5H: false},
+        {rank: 'J1', notation: 'J1', isJoker: true, is5H: false},
+        {rank: 'J2', notation: 'J2', isJoker: true, is5H: false},
       ],
-      wins: 0,
-      losses: 0,
+      wins: 1,
+      losses: 2,
       isBot: false
     },
     {
       id: 'alice',
       name: 'Alice',
-      hand: Array(13).fill(null),
-      wins: 0,
-      losses: 0,
+      hand: Array(5).fill(null),
+      wins: 2,
+      losses: 1,
       isBot: true
     },
     {
       id: 'bob',
       name: 'Bob',
-      hand: Array(13).fill(null),
-      wins: 0,
-      losses: 0,
+      hand: Array(8).fill(null),
+      wins: 1,
+      losses: 2,
       isBot: true
     },
     {
       id: 'cat',
       name: 'Cat',
-      hand: Array(13).fill(null),
+      hand: Array(2).fill(null),
       wins: 0,
-      losses: 0,
+      losses: 3,
       isBot: true
     }
   ],
@@ -104,22 +105,27 @@ function DemoApp() {
   return (
     <Box flexDirection="column" height={30}>
       <Box flexGrow={1}>
-        <Box width="40%" borderStyle="single" flexDirection="column">
+        <Box width="35%" borderStyle="single" flexDirection="column">
           <PlayHistory gameState={mockGameState} />
         </Box>
-        <Box width="60%" flexDirection="column">
-          <PlayerHands gameState={mockGameState} />
-          <Box borderStyle="single" flexGrow={1}>
+        <Box width="65%" flexDirection="column">
+          <Box flexGrow={2} borderStyle="single">
+            <PlayerHands gameState={mockGameState} />
+          </Box>
+          <Box flexGrow={1} borderStyle="single">
             <YourHand gameState={mockGameState} />
           </Box>
         </Box>
       </Box>
-      <Box height={3} borderStyle="single">
-        <Box flexDirection="row" width="100%">
-          <Box width="30%" paddingX={1}>
+      <Box height={4} borderStyle="single">
+        <Box flexDirection="column" width="100%" paddingX={1}>
+          {/* First line - Hint */}
+          <Box height={1}>
             <Text dimColor>Hint: Type 'legal' to see moves</Text>
           </Box>
-          <Box flexGrow={1} paddingX={1}>
+          
+          {/* Second line - Input prompt */}
+          <Box height={1}>
             <Text>Can you beat Bob's 3D &gt; </Text>
             <Text dimColor>(Demo mode - no input)</Text>
           </Box>

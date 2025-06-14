@@ -13,6 +13,7 @@ export class InkGameController {
   public onStateChange?: (state: GameState) => void;
   public onInputRequest?: (prompt: string) => Promise<string>;
   public onHint?: (hint: string) => void;
+  public onExit?: () => void;
   public resolveInput?: (value: string) => void;
 
   constructor() {
@@ -48,16 +49,30 @@ export class InkGameController {
       // Check if we should continue
       const winner = this.checkGameWin();
       if (winner) {
+        // Update win/loss stats
+        this.updateGameStats(winner);
+        this.emitStateChange();
+        
         if (this.onHint) {
           this.onHint(`GAME OVER! ${winner.name} wins the game!`);
         }
-        break;
-      }
-      
-      // Ask if player wants another round
-      const playAgain = await this.askPlayAgain();
-      if (!playAgain) {
-        this.isGameRunning = false;
+        
+        // Ask if player wants to play again
+        const playAgain = await this.askPlayNewGame();
+        if (playAgain) {
+          // Reset for new game
+          this.gameState = new GameStateManager(4);
+          this.lastRoundWinnerId = undefined;
+          this.emitStateChange();
+          await new Promise(resolve => setTimeout(resolve, 100));
+          continue;
+        } else {
+          this.isGameRunning = false;
+          if (this.onExit) {
+            this.onExit();
+          }
+          break;
+        }
       }
     }
   }
@@ -204,7 +219,7 @@ export class InkGameController {
       
       case 'help':
         if (this.onHint) {
-          this.onHint('Commands: play <cards>, pass, legal, help');
+          this.onHint('Commands: <cards> (e.g. 3H, 3H 3D, J1, J2), - (pass), legal, help');
         }
         return { turnComplete: false };
       
@@ -276,10 +291,22 @@ export class InkGameController {
     return state.players.find(p => p.hand.length === 0) || null;
   }
 
-  private async askPlayAgain(): Promise<boolean> {
+
+  private async askPlayNewGame(): Promise<boolean> {
     if (!this.onInputRequest) return false;
     
-    const answer = await this.onInputRequest('Play another round? (y/n) > ');
+    const answer = await this.onInputRequest('Play another game? (y/n) > ');
     return answer.toLowerCase().startsWith('y');
+  }
+
+  private updateGameStats(winner: Player): void {
+    const state = this.gameState.getState();
+    state.players.forEach(player => {
+      if (player.id === winner.id) {
+        player.wins++;
+      } else {
+        player.losses++;
+      }
+    });
   }
 }

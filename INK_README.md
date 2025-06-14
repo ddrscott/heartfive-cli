@@ -46,11 +46,21 @@ The interface is divided into four main sections:
 
 ## Commands
 
-Same as the original CLI:
-- `play <cards>` - Play cards (e.g., "play 5H" or "play 3H 3D")
-- `pass` - Pass your turn
+Simplified command interface:
+- `<cards>` - Play cards directly (e.g., "5H" or "3H 3D") - no need to type "play"
+- `-` - Pass your turn (or use "pass")
 - `legal` - Show legal moves
 - `help` - Show available commands
+
+Examples:
+- Type `3H` to play the 3 of Hearts
+- Type `3H 3D` to play a pair of 3s
+- Type `J1` to play the little joker
+- Type `J2` to play the big joker
+- Type `-` to pass
+- Type `legal` to see what moves are available
+
+Note: J1 is displayed in the Hearts row, J2 in the Spades row, both under the 'JK' column.
 
 ## Troubleshooting
 
@@ -76,6 +86,24 @@ Key files:
 - `src/components/App.tsx` - Main layout
 - `src/components/*` - UI components
 - `src/services/InkGameController.ts` - Game logic with React hooks
+
+## New Features
+
+1. **Simplified Commands**: 
+   - Type card notations directly without "play" prefix
+   - Use `-` as shortcut for pass
+
+2. **Game Statistics**:
+   - Win/Loss counters displayed for all players
+   - Stats persist across rounds within a game session
+
+3. **Game Over Options**:
+   - When someone wins, you're prompted to play another game or quit
+   - Statistics reset when starting a new game
+
+4. **Two-line Input Area**:
+   - Hints displayed on first line
+   - Input prompt on second line for better visibility
 
 ## Changes from Original
 

@@ -35,11 +35,15 @@ export default function App() {
         setHint(hintText);
       };
 
+      gameController.onExit = () => {
+        exit();
+      };
+
       await gameController.startGame();
     };
 
     initGame().catch(console.error);
-  }, [gameController]);
+  }, [gameController, exit]);
 
   // Handle input submission
   const handleSubmit = (value: string) => {
@@ -65,17 +69,19 @@ export default function App() {
   return (
     <Box flexDirection="column" height="100%">
       <Box flexGrow={1}>
-        <Box width="40%" borderStyle="single" flexDirection="column">
+        <Box width="35%" borderStyle="single" flexDirection="column">
           <PlayHistory gameState={gameState} />
         </Box>
-        <Box width="60%" flexDirection="column">
-          <PlayerHands gameState={gameState} />
-          <Box borderStyle="single" flexGrow={1}>
+        <Box width="65%" flexDirection="column">
+          <Box flexGrow={2} borderStyle="single">
+            <PlayerHands gameState={gameState} />
+          </Box>
+          <Box flexGrow={1} borderStyle="single">
             <YourHand gameState={gameState} />
           </Box>
         </Box>
       </Box>
-      <Box height={3} borderStyle="single">
+      <Box height={4} borderStyle="single">
         <InputPrompt
           value={inputValue}
           onChange={setInputValue}

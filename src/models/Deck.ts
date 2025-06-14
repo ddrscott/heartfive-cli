@@ -22,8 +22,8 @@ export class Deck {
 
     // Add jokers
     if (includeJokers) {
-      this.cards.push(CardModel.fromNotation('jj'));
-      this.cards.push(CardModel.fromNotation('JJ'));
+      this.cards.push(CardModel.fromNotation('J1'));
+      this.cards.push(CardModel.fromNotation('J2'));
     }
   }
 

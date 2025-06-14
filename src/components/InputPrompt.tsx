@@ -20,11 +20,18 @@ export default function InputPrompt({
   isActive
 }: InputPromptProps) {
   return (
-    <Box flexDirection="row" width="100%">
-      <Box width="30%" paddingX={1}>
-        {hint && <Text dimColor>Hint: {hint}</Text>}
+    <Box flexDirection="column" width="100%" paddingX={1}>
+      {/* First line - Hint */}
+      <Box height={1}>
+        {hint ? (
+          <Text dimColor>Hint: {hint}</Text>
+        ) : (
+          <Text> </Text>
+        )}
       </Box>
-      <Box flexGrow={1} paddingX={1}>
+      
+      {/* Second line - Input prompt */}
+      <Box height={1}>
         {isActive ? (
           <Box>
             <Text>{prompt || 'Prompt > '}</Text>

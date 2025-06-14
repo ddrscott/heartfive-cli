@@ -1,6 +1,6 @@
 export type Suit = 'C' | 'D' | 'H' | 'S';
 export type Rank = '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'T' | 'J' | 'Q' | 'K' | 'A' | '2';
-export type JokerType = 'jj' | 'JJ';
+export type JokerType = 'J1' | 'J2';
 export type CardNotation = `${Rank}${Suit}` | JokerType;
 
 export interface Card {

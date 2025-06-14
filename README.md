@@ -180,34 +180,10 @@ ISC License
 
 
 ## Example Game Session output
-```txt
-You enter the game
-waiting other players to start
-Alice enters the game
-Bob enters the game
-Cat enters
-Game is delt
-Your hand: 4H 4S 4D 5C 7C 9D 9C 9S QD QH QS 2D jj 5H
----
-Alice is has 3H and can start the first round.
-Alice: plays  3H     [12 cards left]
-Bob: plays    4D     [12 cards left]
-Cat:          --     [13 cards left]
-
-Your hand: 4H 5H            QH .    . jj
-           4S          9S   QS .    .
-           4D               QD . 2D .
-              5C . 7C  9C .    . 2D .
->
-You: plays    7C     [12 cards left]
-Alice:        --     [12 cards left]
-Bob: plays    TD     [11 cards left]
-Cat:          --     [13 cards left]
-
-Your hand: 4H 5H            QH .    . jj
-           4S          9S   QS .    .
-           4D               QD . 2D .
-                 . 7C  9C .    . 2D .
-> play jj
-You: plays    jj     [11 cards left]
+```
+   3  4  5  6  7  8  9  T  J  Q  K  A  2  JK
+H: .  4H .  .  .  .  .  TH .  .  .  .  .  J1
+S: .  .  .  .  .  8S 9S TS .  QS .  AS .  J2
+D: .  .  .  .  .  .  9D .  .  .  KD .  .   
+C: .  4C .  6C 7C .  .  .  .  QC .  .  .  .
 ```

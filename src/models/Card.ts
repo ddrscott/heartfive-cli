@@ -9,7 +9,7 @@ export class CardModel implements Card {
 
   constructor(notation: CardNotation) {
     this.notation = notation;
-    this.isJoker = notation === 'jj' || notation === 'JJ';
+    this.isJoker = notation === 'J1' || notation === 'J2';
     this.is5H = notation === '5H';
 
     if (this.isJoker) {
@@ -25,7 +25,7 @@ export class CardModel implements Card {
   }
 
   static getSingleRankValue(card: Card): number {
-    const singleRanks = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A', '2', 'jj', 'JJ'];
+    const singleRanks = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A', '2', 'J1', 'J2'];
     
     if (card.is5H) {
       return 16; // Highest value
@@ -59,7 +59,7 @@ export class CardModel implements Card {
     const suitOrder = ['C', 'D', 'H', 'S'];
     return [...cards].sort((a, b) => {
       if (a.isJoker && b.isJoker) {
-        return a.rank === 'jj' ? -1 : 1;
+        return a.rank === 'J1' ? -1 : 1;
       }
       if (a.isJoker) return 1;
       if (b.isJoker) return -1;
